@@ -58,7 +58,7 @@ def criarFilhos(tabela):
 
 ## teste FACIL
 # inicio = [[1,2,3],[4,5,6],[7,8,'*']]
-# inicio = [['*',2,3],[1,5,6],[4,7,8]]
+inicio = [['*',2,3],[1,5,6],[4,7,8]]
 
 ## teste RAZOAVEL
 #inicio = [[6,7,3],[2,5,8],[4,1,'*']]
