@@ -1,5 +1,7 @@
 from heap import heap
 
+from tree import PAI
+
 # Recebe uma tabela e duplica ela
 ##NOTA: eu poderia tem feito simplismente: return list(tabela) ou tabela[:] 
 ## 		Mas simplismente nao rodava
@@ -25,6 +27,38 @@ def Fcusto(tabela):
 	for (i,j) in [(a,b) for a in range(0,len(tabela)) for b in range(0,len(tabela)) ]:
 		if( (tabela[i][j] != i*len(tabela) + j+1) and (type(tabela[i][j])==int)):
 			custo += (  abs(i - (tabela[i][j]//len(tabela))) + abs(j - (tabela[i][j]%len(tabela)))   )*tabela[i][j]
+	return custo
+
+# Funcao de custo Distancia Manhatan
+def FcustoCerto(tabela):
+	tamanho = len(tabela)
+	custo = 0
+	resposta = [[1,2,3],[4,5,6],[7,8,'*']]
+	for i in range(0,tamanho):
+		for j in range(0,tamanho):
+			if type(tabela[i][j]) is int:
+				if tabela[i][j] != resposta[i][j]:
+					if resposta[i][j] != '*':
+						custo += 16-resposta[i][j] 
+	return custo
+
+def FcustoMahatan(tabela):
+
+	tamanho = len(tabela)
+	custo = 0
+	for i in range(0,tamanho):
+		for j in range(0,tamanho):
+			if type(tabela[i][j]) is int:
+				if tabela[i][j]%3==0:
+					vL = abs(((tabela[i][j]//3)-1) - i)
+					vC = abs(2 - j)
+				else:
+					vL = abs(tabela[i][j]//3 - i)
+					vC = abs(tabela[i][j]%3 - j-1)
+				
+				vT = vL + vC
+				# print("peça %d erro = %d vl=%d vc=%d"%(tabela[i][j],vT,vL,vC))
+				custo += (16-tabela[i][j])**(vT) if vT!=0 else 0
 	return custo
 
 # Cria uma lista com todas as possibilidade possiveis para a tabela de entrada
@@ -58,10 +92,10 @@ def criarFilhos(tabela):
 
 ## teste FACIL
 # inicio = [[1,2,3],[4,5,6],[7,8,'*']]
-inicio = [['*',2,3],[1,5,6],[4,7,8]]
+# inicio = [['*',2,3],[1,5,6],[4,7,8]]
 
 ## teste RAZOAVEL
-#inicio = [[6,7,3],[2,5,8],[4,1,'*']]
+inicio = [[6,7,3],[2,5,8],[4,1,'*']]
 # inicio = [[1,6,7],[8,5,2],[4,3,'*']]
 
 ## teste DIFICIL (nao resolve rapido)
@@ -69,7 +103,7 @@ inicio = [['*',2,3],[1,5,6],[4,7,8]]
 # inicio = [[1,3,5,7],[9,11,13,15],[2,4,6,14],[8,12,10,'*']]
 
 # cria a uma heap com a configuracao inicial
-r = heap(inicio,Fcusto(inicio))
+r = heap(inicio,FcustoMahatan(inicio))
 
 # armazena todos os estados ja visitados
 # evita minimos locais
@@ -85,7 +119,7 @@ while True :
 	removido = r.remover(m)
 	r = removido if removido is not None else r
 
-	mostrarTabela(m.tabela)
+	# mostrarTabela(m.tabela)
 
 	# Encerra se achar solucao
 	if m.custo==0:
@@ -97,5 +131,11 @@ while True :
 	# coloca ele na heap
 	for filho in criarFilhos(m.tabela):
 		if filho not in EstadosVisitados:
-			r.adicionar(heap(filho,Fcusto(filho)))
+			heapFilho = heap(filho,FcustoMahatan(filho))
+			heapFilho.setPai(m)
+			r.adicionar(heapFilho)
 			EstadosVisitados.append(filho)
+
+
+for x in m.MovimentosFeitos():
+	mostrarTabela(x)

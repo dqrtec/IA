@@ -9,6 +9,19 @@ class heap:
 		self.nosD = None
 		self.custo = custo
 		self.root = self
+		self.pai = None
+
+	def setPai(self,pai):
+		self.pai = pai
+
+	def MovimentosFeitos(self):
+		if self.pai.pai==None:
+			return [self.tabela]
+		else:
+			tabelas = self.pai.MovimentosFeitos()
+			a = tabelas
+			a.append(self.tabela)
+			return a
 
 	# Adiciona noNovo na heap
 	# chame essa funcao na raiz
