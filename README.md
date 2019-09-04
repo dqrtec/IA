@@ -1,4 +1,3 @@
 # IA
-Daniel
-franklyn
-Tibet 
+###Equipe: 
+Daniel de Queiroz, Franklyn Seabra, Tibet Teixeira
