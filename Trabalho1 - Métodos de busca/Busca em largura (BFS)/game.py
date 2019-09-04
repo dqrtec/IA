@@ -1,32 +1,20 @@
-# class Queue:
-# 	def __init__(self):
-# 		self.q = []
-# 		self.length = 0
-
-# 	def enqueue(self, vertex):
-# 		self.q.append(vertex)
-# 		self.length = len(self.q)
-
-# 	def dequeue(self):
-# 		u = self.q.pop(0)
-# 		self.length = len(self.q)
-
-# 		return u
-
 class Game:
 	def __init__(self, game_state):
-		self.visited = False # TODO change visited property to visited property - True(Black) or False(White)
+		self.visited = False
 		self.level = 0
 		self.predecessor = None
 		self.successors = []
 		self.state = game_state
 		self.solutions_state = []
 
-	def findSolutions(self):
-		if (self.successor == None):
-			return game.state
+	def show_solutions(self):
+		if (self.predecessor == None):
+			self.browse()
+			print()
 		else:
-			self.solutions_state.append(game.predecessor.findSolutions)
+			self.solutions_state.append(self.predecessor.show_solutions())
+			self.browse()
+			print()
 
 	def sameAs(self, other_game):
 		return self.state == other_game.state
@@ -34,22 +22,23 @@ class Game:
 	def find_possible_successors(self):
 		coordinates = self.find_empty_space()
 		
-		# refazer calculo para troca(*) => nova_coordenada = atual + coordenada a ser trocada
-		new_state = self.try_move_piece_left(coordinates)
-		if (new_state != self.state):
-			self.successors.append(Game(new_state))
+		# new_state = self.try_move_piece_left(coordinates)
+		# if (new_state != self.state):
+		# 	self.successors.append(Game(new_state))
 
-		new_state = self.try_move_piece_right(coordinates)
-		if (new_state != self.state):
-			self.successors.append(Game(new_state))
+		# new_state = self.try_move_piece_right(coordinates)
+		# if (new_state != self.state):
+		# 	self.successors.append(Game(new_state))
 
-		new_state = self.try_move_piece_up(coordinates)
-		if (new_state != self.state):
-			self.successors.append(Game(new_state))
+		# new_state = self.try_move_piece_up(coordinates)
+		# if (new_state != self.state):
+		# 	self.successors.append(Game(new_state))
 
-		new_state = self.try_move_piece_down(coordinates)
-		if (new_state != self.state):
-			self.successors.append(Game(new_state))
+		# new_state = self.try_move_piece_down(coordinates)
+		# if (new_state != self.state):
+		# 	self.successors.append(Game(new_state))
+
+		self.try_move_piece(coordinates)
 
 		return self.successors
 
@@ -73,15 +62,13 @@ class Game:
 	def try_move_piece_left(self, coordinates):
 			row, col = coordinates
 			copy_state = self.copy()
-			if (col > 0):
-				copy_state[row][col-1], copy_state[row][col] = self.state[row][col], self.state[row][col-1] 
+			
 			return copy_state
 
 	def try_move_piece_right(self, coordinates):
 			row, col = coordinates
 			copy_state = self.copy()
-			if (col < 2):
-				copy_state[row][col+1], copy_state[row][col] = self.state[row][col], self.state[row][col+1] 
+			
 			return copy_state
 
 	def try_move_piece_up(self, coordinates):
@@ -98,6 +85,33 @@ class Game:
 				copy_state[row+1][col], copy_state[row][col] = self.state[row][col], self.state[row+1][col] 
 			return copy_state
 
+	def try_move_piece(self, coordinates):
+		row, col = coordinates
+
+		if (row < 2):
+			copy_state = self.copy()
+			copy_state[row+1][col], copy_state[row][col] = self.state[row][col], self.state[row+1][col]
+			if self.predecessor == None or copy_state != self.predecessor.state: 
+				self.successors.append(Game(copy_state))
+
+		if (row > 0):
+			copy_state = self.copy()
+			copy_state[row-1][col], copy_state[row][col] = self.state[row][col], self.state[row-1][col]
+			if self.predecessor == None or copy_state != self.predecessor.state:
+				self.successors.append(Game(copy_state))
+
+		if (col > 0):
+			copy_state = self.copy()
+			copy_state[row][col-1], copy_state[row][col] = self.state[row][col], self.state[row][col-1] 
+			if self.predecessor == None or copy_state != self.predecessor.state:
+				self.successors.append(Game(copy_state))
+
+		if (col < 2):
+			copy_state = self.copy()
+			copy_state[row][col+1], copy_state[row][col] = self.state[row][col], self.state[row][col+1] 
+			if self.predecessor == None or copy_state != self.predecessor.state:
+				self.successors.append(Game(copy_state))
+
 	def browse(self):
 		for i in range(3):
 			for j in range(3):
@@ -111,39 +125,37 @@ def bfs(initial_state, goal_state):
 	Queue = []
 	Queue.append(initial_state)
 
-	while Queue.length != 0:
-		node = Queue.pop()
+	while len(Queue) != 0:
+		node = Queue.pop(0)
 
 		if node.sameAs(goal_state):
 			return node
 
 		node.find_possible_successors()
 
-		for successor in u.successors:
-			if !successor.visited:
+		for successor in node.successors:
+			if not(successor.visited):
 				successor.level = node.level + 1
 				successor.predecessor = node
-				Q.enqueue(v)
+				Queue.append(successor)
 		node.visited = True
-
-	return None
 
 def main():
 	
-	#TESTE movimentação
-
-	g = Game([[1, 2, '*'], 
+	g = Game([[2, '*', 4], 
+			 [3, 1, 6],
+			 [7, 5, 8]])
+	
+	g1 = Game([[1, '*', 2], 
 			 [4, 5, 3],
 			 [7, 8, 6]])
 
-	# successors = g.play()
-	# g.imprimir()
-	# print()
+	goal = Game([[1, 2, 3],
+				 [4, 5, 6],
+				 [7, 8, '*']])
 
-	# for play in successors:
-	# 	play.imprimir()
-	# 	print()
+	sol = bfs(g, goal)
 
-
+	sol.show_solutions()
 
 main()
