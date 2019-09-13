@@ -19,13 +19,63 @@ def mostrarTabela(tabela):
 		print(linha)
 	print()
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Funcao de custo Distancia Manhatan
-def Fcusto(tabela):
+def FcustoManhatan(tabela):
+	tamanho = len(tabela)
 	custo = 0
-	for (i,j) in [(a,b) for a in range(0,len(tabela)) for b in range(0,len(tabela)) ]:
-		if( (tabela[i][j] != i*len(tabela) + j+1) and (type(tabela[i][j])==int)):
-			custo += (  abs(i - (tabela[i][j]//len(tabela))) + abs(j - (tabela[i][j]%len(tabela)))   )*tabela[i][j]
+	for i in range(0,tamanho):
+		for j in range(0,tamanho):
+			if type(tabela[i][j]) is int:
+				if tabela[i][j]%3==0:
+					vL = abs(((tabela[i][j]//3)-1) - i)
+					vC = abs(2 - j)
+				else:
+					vL = abs(tabela[i][j]//3 - i)
+					vC = abs(tabela[i][j]%3 - j-1)
+				
+				vT = vL + vC
+				# print("peça %d erro = %d vl=%d vc=%d"%(tabela[i][j],vT,vL,vC))
+				custo += vT
 	return custo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Funcao de custo Distancia Manhatan
 def FcustoCerto(tabela):
@@ -40,7 +90,7 @@ def FcustoCerto(tabela):
 						custo += 16-resposta[i][j] 
 	return custo
 
-def FcustoMahatan(tabela):
+def FcustoMahatanHeuristica(tabela):
 
 	tamanho = len(tabela)
 	custo = 0
@@ -101,7 +151,8 @@ inicio = [[6,7,3],[2,5,8],[4,1,'*']]
 # inicio = [[1,3,5,7],[9,11,13,15],[2,4,6,14],[8,12,10,'*']]
 
 # cria a uma heap com a configuracao inicial
-r = heap(inicio,FcustoMahatan(inicio))
+r = heap(inicio,FcustoManhatan(inicio))
+r.setAltura(0)
 
 mostrarTabela(inicio)
 
@@ -122,7 +173,7 @@ while True :
 	# mostrarTabela(m.tabela)
 
 	# Encerra se achar solucao
-	if m.custo==0:
+	if m.tabela==[[1,2,3],[4,5,6],[7,8,'*']]:
 		# mostrarTabela(m.tabela)
 		break
 
@@ -131,7 +182,8 @@ while True :
 	# coloca ele na heap
 	for filho in criarFilhos(m.tabela):
 		if filho not in EstadosVisitados:
-			heapFilho = heap(filho,FcustoMahatan(filho))
+			heapFilho = heap(filho,FcustoManhatan(filho)+m.altura+1)
+			heapFilho.setAltura(m.altura+1)
 			heapFilho.setPai(m)
 			r.adicionar(heapFilho)
 			EstadosVisitados.append(filho)

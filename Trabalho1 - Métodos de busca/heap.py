@@ -10,6 +10,7 @@ class heap:
 		self.custo = custo
 		self.root = self
 		self.pai = None
+		self.altura = 0
 
 	def setPai(self,pai):
 		self.pai = pai
@@ -22,6 +23,8 @@ class heap:
 			a = tabelas
 			a.append(self.tabela)
 			return a
+	def setAltura(self,alturaNo):
+		self.altura = alturaNo
 
 	# Adiciona noNovo na heap
 	# chame essa funcao na raiz
