@@ -1,7 +1,5 @@
 from heap import heap
 
-from tree import PAI
-
 # Recebe uma tabela e duplica ela
 ##NOTA: eu poderia tem feito simplismente: return list(tabela) ou tabela[:] 
 ## 		Mas simplismente nao rodava
@@ -105,6 +103,8 @@ inicio = [[6,7,3],[2,5,8],[4,1,'*']]
 # cria a uma heap com a configuracao inicial
 r = heap(inicio,FcustoMahatan(inicio))
 
+mostrarTabela(inicio)
+
 # armazena todos os estados ja visitados
 # evita minimos locais
 EstadosVisitados = []
@@ -123,7 +123,7 @@ while True :
 
 	# Encerra se achar solucao
 	if m.custo==0:
-		mostrarTabela(m.tabela)
+		# mostrarTabela(m.tabela)
 		break
 
 	# Com base no no da heap
