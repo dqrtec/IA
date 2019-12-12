@@ -1,0 +1,41 @@
+Funcoes de ativacao:
+	existem varias funcoes de ativacoes dentre elas:<https://en.wikipedia.org/wiki/Activation_function>
+
+Mudando pesos multiniveis:
+	derivada da funcao = ex:sigmoidal' = y(1-y) "y e a soma dos pesos * entradas"
+	delta saida = erro * derivada da funcao
+	delta escondido = derivada da função * peso aresta * delta saida
+
+	novo peso = (pesoAtual * momento) + (entrada * Delta * taxa de aprendizado)
+
+taxa de aprendizado:
+	o quao rapido ele irá aprender.
+
+		valor alto : aprende rápido mas pode ter muito erro(não é tao preciso)
+		valor baixo : demora a aprender mas e bem mais preciso no aprendisado
+
+epoca(geracao):
+	quantas vezes o algoritmo irá se repetir e irá se aperfeiçoar
+
+momento:
+	tenta fugir de minimos locais
+
+BAIS/vies:
+	cria um neuronio extra para auxiliar na exatidao dos resultados, esse neuronio segue todas as regras dos demais neuronios(tem entrada e pesos)
+
+Deep Learn:
+	é uma rede neural com 2 ou mais camadas escondidas
+
+Camadas Ocultas:
+	numero de neuronios por camada = (numero neuronios entrada + numero neuronios saida)/2
+	problemas linearmente separaveis nao precisam de camadas ocultas
+	se o problema é categorizar em mais de dois tipos é necessario cria uma saida para categoria
+
+Decidad do gradiente:
+	melhorar os pesos de forma a chegar no melhor resultado possivel
+	• Batch : calcula todos os erros de todos os dados e so depois muda os pesos
+	• Stochastic : para cada registro os pesos ja são modificados
+
+principais bibliotecas:
+	• skearn
+	• pybrain
